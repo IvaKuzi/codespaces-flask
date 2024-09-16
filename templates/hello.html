@@ -1,0 +1,9 @@
+<head>
+    <title>Hello {{name}}!</title>
+    <meta http-equiv="refresh" content="5">
+    <link rel="stylesheet" href="{{ url_for("static", filename="main.css") }}"
+</head>
+<body class="App-header">
+    <h1>Hello {{name}}!</h1>
+    {% include "footer.html" %}
+</body>

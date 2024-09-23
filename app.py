@@ -22,3 +22,8 @@ def preise():
 def contact():
     return render_template("contact.html")
 
+# generic page
+@app.route("/<address>")
+def generic(address):
+    return render_template("generic.html", title=address)
+    

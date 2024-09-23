@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 
 app = Flask(__name__)
 
@@ -18,8 +18,12 @@ def about():
 def preise():
     return render_template("prices.html")
 
-@app.route("/kontakte")
+@app.route("/kontakt", methods=['POST', 'GET'])
 def contact():
+    if request.method == 'POST':
+        print(request.form)
+        print(f"Name: {request.form['name']}")
+        print(f"E-Mail: {request.form['email']}")
     return render_template("contact.html")
 
 # generic page

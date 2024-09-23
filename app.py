@@ -3,26 +3,22 @@ from flask import Flask, render_template, redirect, url_for
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    #return render_template("index.html", title="Hello")
-    print("/")
-    return render_template("hello_world.html")
+def index():
+    return render_template("index.html")
 
 @app.route("/home")
 def home():
-    print("/home")
-    return redirect( url_for("hello_world") )
+    return redirect( url_for("index") )
 
-@app.route("/about")
+@app.route("/ueber-uns")
 def about():
-    return "About Us"
+    return render_template("about.html")
 
 @app.route("/preise")
 def preise():
-    return "<h1>Unsere Tarife</h1>"
+    return render_template("prices.html")
 
-#impressum
-#preise
-#kontakte
-#teilen
-#galerie
+@app.route("/kontakte")
+def contact():
+    return render_template("contact.html")
+

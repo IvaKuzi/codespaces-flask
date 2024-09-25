@@ -24,11 +24,10 @@
     }
   },
   "forwardPorts": [5000],
-    "portsAttributes": {
+  "portsAttributes": {
     "5000": {
       "label": "Application",
-      "onAutoForward": "notify",
-      "requireLocalPort": false,
+      "onAutoForward": "openPreview",
       "visibility": "public"
     }
   }

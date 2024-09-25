@@ -11,12 +11,6 @@
   "postAttachCommand": {
     "server": "flask --debug run"
   },
-  "portsAttributes": {
-    "5000": {
-      "label": "Application",
-      "onAutoForward": "openPreview"
-    }
-  },
   "customizations": {
     "codespaces": {
       "openFiles": [
@@ -29,5 +23,13 @@
       ]
     }
   },
-  "forwardPorts": [5000]
+  "forwardPorts": [5000],
+    "portsAttributes": {
+    "5000": {
+      "label": "Application",
+      "onAutoForward": "openPreview",
+      "requireLocalPort": false,
+      "visibility": "public"
+    }
+  }
 }

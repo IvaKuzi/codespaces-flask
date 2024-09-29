@@ -4,3 +4,13 @@
     <a href="/preise">Preise</a>
     <a href="/kontakt">Kontakt</a>
 </div>
+<div>
+    <br>
+    {% if template_name != "login.html" %}
+        {% if username != '' %}
+            {{username}} <a href="/logout">logout</a>
+        {% else %}
+            <a href="/login">login</a>
+        {% endif %}
+    {% endif %}
+</div>

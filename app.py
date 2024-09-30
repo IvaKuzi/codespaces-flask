@@ -58,5 +58,5 @@ def generic(address):
         username = session['username']
     else:
         username = ''
-    return render_template("generic.html", title=address, template_name=url, username=username)
+    return render_template("generic.html", title=address, template_name="generic.html", username=username)
     

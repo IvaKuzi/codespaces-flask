@@ -54,5 +54,5 @@ def logout():
 # generic page
 @app.route("/<address>")
 def generic(address):
-    return custom_render("generic.html", title=address)
+    return render_template("generic.html", title=address)
     

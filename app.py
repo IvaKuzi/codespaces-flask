@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, flash
 
 app = Flask(__name__)
 
@@ -39,8 +39,9 @@ def contact():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        print(session)
+        username = request.form['username']
+        session['username'] = username
+        flash(f"User {username} logged in")
         return redirect('/')
     else:
         return custom_render('login.html')
@@ -48,7 +49,8 @@ def login():
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
-    session.pop('username', None)
+    username = session.pop('username', None)
+    flash(f"User {username} logged out")
     return redirect(request.referrer or '/')
 
 # generic page

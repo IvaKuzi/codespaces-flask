@@ -14,3 +14,20 @@
         {% endif %}
     {% endif %}
 </div>
+<div class="floating-message" id="message-div" style="display: none;">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+
+            <script>
+                const messageElement = document.getElementById('message-div');
+                messageElement.style.display = 'block'; // show message
+                setTimeout(function() { messageElement.remove(); }, 2000); // 2000ms
+            </script>
+        {% endif %}
+    {% endwith %}
+</div>

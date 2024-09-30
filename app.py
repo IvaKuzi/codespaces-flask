@@ -54,5 +54,9 @@ def logout():
 # generic page
 @app.route("/<address>")
 def generic(address):
-    return render_template("generic.html", title=address)
+    if 'username' in session:
+        username = session['username']
+    else:
+        username = ''
+    return render_template("generic.html", title=address, template_name=url, username=username)
     

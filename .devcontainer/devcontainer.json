@@ -9,7 +9,7 @@
   "updateContentCommand": "pip install -r requirements.txt",
   "postCreateCommand": "",
   "postAttachCommand": {
-    "server": "flask --debug run"
+    "server": "flask --debug --app app run"
   },
   "customizations": {
     "codespaces": {

@@ -1,8 +1,44 @@
 <head>
     <title>Home</title>
-    <meta http-equiv="refresh" content="5">
+    <!--meta http-equiv="refresh" content="5"-->
     <link rel="stylesheet" href="/static/main.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 </head>
 <body class="App-header">
     <h1>Home</h1>
+    <div id="message-form">
+        <input type="text" name="username" placeholder="User name ..."  id="user-text"/>
+        <input type="text" name="message"  placeholder="Type your message ..." id="message-text"/>
+        <input type="submit" id="message-send-button"/>
+    </div>
+    <script>
+        const socket = io.connect('https://' + document.domain + ':' + location.port);
+        const messageForm = document.getElementById("message-form");
+        const userText = document.getElementById("user-text");
+        const messageText = document.getElementById("message-text");
+        const sendButton = document.getElementById('message-send-button');
+
+        socket.on( 'connect', function() {
+            console.log("Connected successfully!")
+        })
+
+        socket.on( 'hello' ,function() {
+            console.log('Event "hello" received!')
+        })
+
+        // Add an event listener to listen for 'click' events
+        sendButton.addEventListener('click', function(event) {
+            // Prevent the form from submitting (if needed)
+            event.preventDefault();
+
+            // Get the input fields values
+            const user = userText.value;
+            const message = messageText.value;
+
+            // Perform an action with the value
+            console.log('Message from ' + user + ' submitted: ' + message);
+            
+        });
+
+    </script>
 </body>

@@ -3,6 +3,7 @@
     <!--meta http-equiv="refresh" content="5"-->
     <link rel="stylesheet" href="/static/main.css">
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <script src="/static/webchat.js" defer></script>
 </head>
 <body class="App-header">
     <h1>Web Chat</h1>
@@ -14,54 +15,4 @@
         <input type="text" name="message"  placeholder="Type your message ..." id="message-text"/>
         <input type="submit" id="message-send-button"/>
     </form>
-    <script>
-        const socket = io.connect('https://' + document.domain + ':' + location.port);
-        const messageForm = document.getElementById("message-form");
-        const userText = document.getElementById("user-text");
-        const messageText = document.getElementById("message-text");
-        const sendButton = document.getElementById('message-send-button');
-        const messageHolder = document.getElementById('message-holder');
-
-        function appendMessage(payload) {
-            const timestamp = payload.timestamp;
-            const user = payload.user;
-            const content = payload.content
-            console.log('(' + timestamp + ') New message from ' + user + ' received: ' + content );
-            const message_li = document.createElement('li');
-            message_li.textContent = '(' + timestamp + ') ' + user + ': ' + content;
-            messageHolder.appendChild(message_li);
-        }
-
-        socket.on( 'connect', function() {
-            console.log("Connected successfully!")
-        })
-
-        socket.on( 'all-messages', function(data) {
-            messageHolder.replaceChildren(); // This removes all children
-            console.log(data);
-            data.forEach(payload => {
-                appendMessage(payload)
-            });
-            messageHolder.scrollTop = messageHolder.scrollHeight;
-        })
-
-        // Add an event listener to listen for 'click' events
-        sendButton.addEventListener('click', function(event) {
-            // Prevent the form from submitting (if needed)
-            event.preventDefault();
-
-            // Get the input fields values
-            const user = userText.value;
-            const content = messageText.value;
-
-            // Perform an action with the value
-            console.log('Message from ' + user + ' submitted: ' + content);
-            
-            socket.emit( 'message-submit', {
-                user    : user,
-                content : content
-            }, );
-        });
-
-    </script>
 </body>

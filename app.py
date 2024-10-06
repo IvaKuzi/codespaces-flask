@@ -22,8 +22,10 @@ def preise():
 def contact():
     if request.method == 'POST':
         print(request.form)
-        print(f"Name: {request.form['name']}")
-        print(f"E-Mail: {request.form['email']}")
+        name = request.form['name']
+        email = request.form['email']
+        with open('submissions.txt', 'a') as file:
+            file.write(f"Name: {name}, email: {email}\n")
     return render_template("contact.html")
 
 # generic page

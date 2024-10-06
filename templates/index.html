@@ -22,11 +22,7 @@
         const sendButton = document.getElementById('message-send-button');
         const messageHolder = document.getElementById('message-holder');
 
-        socket.on( 'connect', function() {
-            console.log("Connected successfully!")
-        })
-
-        socket.on( 'new-message', function(payload) {
+        function appendMessage(payload) {
             const timestamp = payload.timestamp;
             const user = payload.user;
             const content = payload.content
@@ -34,6 +30,19 @@
             const message_li = document.createElement('li');
             message_li.textContent = '(' + timestamp + ') ' + user + ': ' + content;
             messageHolder.appendChild(message_li);
+        }
+
+        socket.on( 'connect', function() {
+            console.log("Connected successfully!")
+        })
+
+        socket.on( 'all-messages', function(data) {
+            messageHolder.replaceChildren(); // This removes all children
+            console.log(data);
+            data.forEach(payload => {
+                appendMessage(payload)
+            });
+            messageHolder.scrollTop = messageHolder.scrollHeight;
         })
 
         // Add an event listener to listen for 'click' events

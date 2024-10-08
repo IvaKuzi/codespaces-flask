@@ -1,10 +1,18 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'ssdasdmn,a.fgj.arshklgwewet'
+
+def custom_render(url):
+    if 'username' in session:
+        username = session['username']
+    else:
+        username = 'Nicht eingelogt'
+    return render_template(url, user=username)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return custom_render("index.html")
 
 @app.route("/home")
 def home():
@@ -12,11 +20,20 @@ def home():
 
 @app.route("/ueber-uns")
 def about():
-    return render_template("about.html")
+    return custom_render("about.html")
 
 @app.route("/preise")
 def preise():
-    return render_template("prices.html")
+    return custom_render("prices.html")
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    username = 'Nicht eingelogt'
+    if request.method == 'POST':
+        username = request.form['username']
+        print(username)
+        session['username'] = username
+    return custom_render("login.html")
 
 @app.route("/kontakt", methods=['POST', 'GET'])
 def contact():
@@ -26,7 +43,7 @@ def contact():
         email = request.form['email']
         with open('submissions.txt', 'a') as file:
             file.write(f"Name: {name}, email: {email}\n")
-    return render_template("contact.html")
+    return custom_render("contact.html")
 
 # generic page
 @app.route("/<address>")

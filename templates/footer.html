@@ -3,9 +3,28 @@
     <a href="/ueber-uns">Über uns</a>
     <a href="/preise">Preise</a>
     <a href="/kontakt">Kontakt</a>
-    <a href="/login">Login</a>
 </div>
 <div>
     {{user}}
-    <a href="">Logout</a>
+    {% if user != 'Nicht eingelogt' %}
+        <a href="/logout">Logout</a>
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}
+</div>
+<div class="floating-message" id="message-div" style="display: none;">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            <script>
+                const messageElement = document.getElementById('message-div');
+                messageElement.style.display = 'block'; // show message
+                setTimeout(function() { messageElement.remove(); }, 10000); // 2000ms
+            </script>
+        {% endif %}
+    {% endwith %}
 </div>

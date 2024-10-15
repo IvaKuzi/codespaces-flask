@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
+from flask import flash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ssdasdmn,a.fgj.arshklgwewet'
@@ -33,7 +34,15 @@ def login():
         username = request.form['username']
         print(username)
         session['username'] = username
+        flash(f'{username} eingelogt')
     return custom_render("login.html")
+
+@app.route("/logout")
+def logout():
+    username = session.pop('username', None)
+    flash(f'{username} ausgelogt')
+    return redirect('/')
+    
 
 @app.route("/kontakt", methods=['POST', 'GET'])
 def contact():

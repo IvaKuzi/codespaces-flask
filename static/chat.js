@@ -17,7 +17,12 @@ function appendMessage(payload) {
 
 socket.on( 'connect', function() {
     console.log("Connected successfully!")
+    console.log('Connected using transport:', socket.io.engine.transport.name);
 })
+
+socket.io.engine.on('upgrade', () => {
+    console.log('Upgraded transport to:', socket.io.engine.transport.name);
+});
 
 socket.on( 'all-messages', function(data) {
     messageHolder.replaceChildren(); // This removes all children

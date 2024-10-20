@@ -99,12 +99,15 @@ sendButton.addEventListener('click', function(event) {
     // Get the input fields values
     const user = userText.value;
     const content = messageText.value;
+    if( content != '' ) {
+        messageText.value = '';
 
-    // Perform an action with the value
-    console.log('Message from ' + user + ' submitted: ' + content);
+        // Perform an action with the value
+        console.log('Message from ' + user + ' submitted: ' + content);
     
-    socket.emit( 'message-submit', {
-        user    : user,
-        content : content
-    }, );
+        socket.emit( 'message-submit', {
+            user    : user,
+            content : content
+        }, );
+    };
 });

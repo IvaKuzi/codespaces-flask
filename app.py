@@ -38,23 +38,33 @@ def getHistory(file_name):
 # Track connection
 @socketio.on('connect')
 def handle_connect():
+    socketio.start_background_task(target=bkg_handle_connect)
+
+def bkg_handle_connect():
     #print(f'Client connected: {request.sid}')
-    print(f'Client connected!')
     '''
+    print(f'Client connected!')
     file_name = 'messages.json'
     data = getHistory(file_name)
     socketio.emit('all-messages', data)
     '''
+    return
     
 # Track disconnection
 @socketio.on('disconnect')
 def handle_disconnect():
+    socketio.start_background_task(target=bkg_handle_disconnect)
+
+def bkg_handle_disconnect():
     #print(f'Client disconnected: {request.sid}')
     print(f'Client disconnected!')
 
 # Track message submission
 @socketio.on('message-submit')
 def handle_message(payload):
+    socketio.start_background_task(target=bkg_handle_message, payload=payload)
+
+def bkg_handle_message(payload):
     '''
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     user = payload['user']

@@ -5,21 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python-Debugger: Flask",
-            "type": "debugpy",
+            "command": "gunicorn --worker-class eventlet -w 1 --log-level debug app:app",
+            "name": "Run gunicorn eventlet",
             "request": "launch",
-            "module": "flask",
-            "env": {
-                "FLASK_APP": "app.py",
-                "FLASK_DEBUG": "1"
-            },
-            "args": [
-                "run",
-                "--debugger",
-                "--reload"
-            ],
-            "jinja": true,
-            "autoStartBrowser": false
+            "type": "node-terminal"
         }
     ]
 }

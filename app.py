@@ -111,6 +111,3 @@ def generic(address):
     else:
         username = ''
     return render_template("generic.html", title=address, template_name="generic.html", username=username)
-    
-if __name__ == '__main__':
-    socketio.run(app, debug=True)

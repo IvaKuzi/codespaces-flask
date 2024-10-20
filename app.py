@@ -40,9 +40,11 @@ def getHistory(file_name):
 def handle_connect():
     #print(f'Client connected: {request.sid}')
     print(f'Client connected!')
+    '''
     file_name = 'messages.json'
     data = getHistory(file_name)
     socketio.emit('all-messages', data)
+    '''
     
 # Track disconnection
 @socketio.on('disconnect')
@@ -58,13 +60,14 @@ def handle_message(payload):
     content = payload['content']
     payload['timestamp'] = timestamp
     print(f'({timestamp}) Message from {user} received: {content}')
-
+    '''
     file_name = 'messages.json'
     data = getHistory(file_name)
     data.append(payload)
     with open(file_name, 'w') as file:
         json.dump(data, file, indent=4)  # Write updated data back to the file
     socketio.emit('all-messages', data)
+    '''
     
 if __name__ == '__main__':
     print(f"Debug mode: {app.debug}")

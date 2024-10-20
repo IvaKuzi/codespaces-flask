@@ -2,11 +2,14 @@
 #import eventlet
 #eventlet.monkey_patch()
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, current_app #, request
 from flask_socketio import SocketIO
 import time, json
 
 app = Flask(__name__)
+with app.app_context():
+    print(f"Current app: {current_app.name}")
+
 app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(app)
 
@@ -35,7 +38,8 @@ def getHistory(file_name):
 # Track connection
 @socketio.on('connect')
 def handle_connect():
-    print(f'Client connected: {request.sid}')
+    #print(f'Client connected: {request.sid}')
+    print(f'Client connected!')
     file_name = 'messages.json'
     data = getHistory(file_name)
     socketio.emit('all-messages', data)
@@ -43,7 +47,8 @@ def handle_connect():
 # Track disconnection
 @socketio.on('disconnect')
 def handle_disconnect():
-    print(f'Client disconnected: {request.sid}')
+    #print(f'Client disconnected: {request.sid}')
+    print(f'Client disconnected!')
 
 # Track message submission
 @socketio.on('message-submit')

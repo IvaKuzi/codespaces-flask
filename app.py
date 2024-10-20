@@ -1,6 +1,6 @@
 # uncommen next two line for production 
-#import eventlet
-#eventlet.monkey_patch()
+import eventlet
+eventlet.monkey_patch()
 
 from flask import Flask, render_template, current_app #, request
 from flask_socketio import SocketIO
@@ -55,12 +55,12 @@ def handle_disconnect():
 # Track message submission
 @socketio.on('message-submit')
 def handle_message(payload):
+    '''
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
     user = payload['user']
     content = payload['content']
     payload['timestamp'] = timestamp
     print(f'({timestamp}) Message from {user} received: {content}')
-    '''
     file_name = 'messages.json'
     data = getHistory(file_name)
     data.append(payload)
@@ -68,6 +68,7 @@ def handle_message(payload):
         json.dump(data, file, indent=4)  # Write updated data back to the file
     socketio.emit('all-messages', data)
     '''
+    return
     
 if __name__ == '__main__':
     print(f"Debug mode: {app.debug}")

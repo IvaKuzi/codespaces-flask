@@ -62,4 +62,8 @@ def handle_message(payload):
     socketio.emit('all-messages', data)
     
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    print(f"Debug mode: {app.debug}")
+    if app.debug:
+        socketio.run(app, debug=True)
+    else:
+        socketio.run(app)

@@ -8,6 +8,9 @@
 <body class="App-header">
     <h1>Web Chat</h1>
     {% if username != '' %}
+        <div style="display: flex;">
+            <ul class="active-users-holder" id="active-users-holder"></ul>
+        </div>
         <div>
             <ul class="message-holder" id="message-holder"></ul>
         </div>

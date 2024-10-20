@@ -4,6 +4,7 @@ const userText = document.getElementById("user-text");
 const messageText = document.getElementById("message-text");
 const sendButton = document.getElementById('message-send-button');
 const messageHolder = document.getElementById('message-holder');
+const usersHolder = document.getElementById('active-users-holder');
 
 function appendMessage(payload) {
     const timestamp = payload.timestamp;
@@ -12,6 +13,12 @@ function appendMessage(payload) {
     const message_li = document.createElement('li');
     message_li.textContent = '(' + timestamp + ') ' + user + ': ' + content;
     messageHolder.appendChild(message_li);
+};
+
+function appendUser(user) {
+    const user_li = document.createElement('li');
+    user_li.textContent = user;
+    usersHolder.appendChild(user_li);
 };
 
 socket.on( 'connect', function() {
@@ -66,13 +73,23 @@ socket.on("connect_error", (error) => {
 });
 
 socket.on( 'all-messages', function(data) {
-    messageHolder.replaceChildren(); // This removes all children
     console.log("Received list of all messages.");
+    messageHolder.replaceChildren(); // This removes all children
     //console.log(data);
     data.forEach(payload => {
         appendMessage(payload)
     });
     messageHolder.scrollTop = messageHolder.scrollHeight;
+});
+
+socket.on( 'update-users', function(usernames) {
+    console.log("Updating list of active users.");
+    console.log(usernames)
+    usersHolder.replaceChildren(); // This removes all children
+    appendUser("Users online: ")
+    usernames.forEach(user => {
+        appendUser(user)
+    });
 });
 
 // Add an event listener to listen for 'click' events

@@ -10,6 +10,9 @@ socketio = SocketIO(app)
 # Set the secret key to some random bytes. Keep this really secret!
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+# Dictionary to store active connections
+active_connections = {}
+
 def custom_render(url):
     if 'username' in session:
         username = session['username']
@@ -48,14 +51,34 @@ def chat():
 # Track connection
 @socketio.on('connect')
 def handle_connect():
-    print(f'Client connected: {request.sid}')
     data = getHistory('messages.json')
     socketio.emit('all-messages', data)
+    
+    sid = request.sid # Get the session ID of the connected client
+    ip = request.remote_addr
+    username = session['username']
+    active_connections[sid] = { "ip" : ip, "username" : username }
+
+    # Update a list of usernames
+    usernames = [entry['username'] for entry in active_connections.values()]
+    socketio.emit('update-users', usernames)
+
+    print(f"Client connected: {sid} (IP: {ip}) (username: {username})")
+    
     
 # Track disconnection
 @socketio.on('disconnect')
 def handle_disconnect():
-    print(f'Client disconnected: {request.sid}')
+    sid = request.sid  # Get the session ID of the disconnected client
+    connection = active_connections.pop(sid, None)  # Remove the client from the active connections list
+    ip = connection['ip']
+    username = connection['username']
+
+    # Update a list of usernames
+    usernames = [entry['username'] for entry in active_connections.values()]
+    socketio.emit('update-users', usernames)
+
+    print(f'Client disconnected: {sid}  (IP: {ip}) (username: {username})')
 
 # Track message submission
 @socketio.on('message-submit')

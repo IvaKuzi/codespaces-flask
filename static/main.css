@@ -50,12 +50,20 @@ a {
 
 .message-holder {
     border:1px solid #FFF; 
-    max-height: 70vh;
+    max-height: 40vh;
     overflow-y:scroll;
     padding: 5;
 
     li {
         list-style-type: none;
+    }
+}
+
+.active-users-holder {
+    display: flex;
+    li {
+        list-style-type: none;
+        margin: 10px;
     }
 }
 

@@ -1,4 +1,5 @@
-const socket = io.connect('https://' + document.domain + ':' + location.port);
+//const socket = io.connect('https://' + document.domain + ':' + location.port);
+socket = io(); // if your front is served on the same domain as your server
 const messageForm = document.getElementById("message-form");
 const userText = document.getElementById("user-text");
 const messageText = document.getElementById("message-text");
@@ -9,24 +10,71 @@ function appendMessage(payload) {
     const timestamp = payload.timestamp;
     const user = payload.user;
     const content = payload.content
-    console.log('(' + timestamp + ') New message from ' + user + ' received: ' + content );
     const message_li = document.createElement('li');
     message_li.textContent = '(' + timestamp + ') ' + user + ': ' + content;
     messageHolder.appendChild(message_li);
-}
+};
 
 socket.on( 'connect', function() {
     console.log("Connected successfully!")
-})
+    console.log("Socket connected: " + socket.connected); // true
+
+    const engine = socket.io.engine;
+    console.log("Transport: " + engine.transport.name); // in most cases, prints "polling"
+
+    engine.once("upgrade", () => {
+        // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
+        console.log('Upgraded transport to: ' + engine.transport.name); // in most cases, prints "websocket"
+    });
+
+    engine.on("packet", ({ type, data }) => {
+        // called for each packet received
+        console.log("Packet received!")
+    });
+    
+    engine.on("packetCreate", ({ type, data }) => {
+        // called for each packet sent
+        console.log("Packet sent!")
+    });
+    
+    engine.on("drain", () => {
+        // called when the write buffer is drained
+        console.log("Write buffer is drained!")
+    });
+    
+    engine.on("close", (reason) => {
+        // called when the underlying connection is closed
+        console.log("Connection closed!")
+    });
+});
+
+socket.on( 'disconnect', function() {
+    console.log("Disconnected!")
+    console.log("Socket connected: " + socket.connected); // true
+});
+
+socket.on("connect_error", (error) => {
+    if (socket.active) {
+      // temporary failure, the socket will automatically try to reconnect
+      console.log("Connection error! Temporary failure, the socket will automatically try to reconnect.")
+    } else {
+      // the connection was denied by the server
+      // in that case, `socket.connect()` must be manually called in order to reconnect
+      console.log("Connection error!" + error.message);
+      console.log("Trying to reconnect ... ");
+      socket.connect();
+    }
+});
 
 socket.on( 'all-messages', function(data) {
     messageHolder.replaceChildren(); // This removes all children
-    console.log(data);
+    console.log("Received list of all messages.");
+    //console.log(data);
     data.forEach(payload => {
         appendMessage(payload)
     });
     messageHolder.scrollTop = messageHolder.scrollHeight;
-})
+});
 
 // Add an event listener to listen for 'click' events
 sendButton.addEventListener('click', function(event) {

@@ -3,10 +3,11 @@
     <a href="/ueber-uns">Über uns</a>
     <a href="/preise">Preise</a>
     <a href="/kontakt">Kontakt</a>
+    <a href="/chat">Chat</a>
 </div>
 <div>
     {{user}}
-    {% if user != 'Nicht eingelogt' %}
+    {% if user != '' %}
         <a href="/logout">Logout</a>
     {% else %}
         <a href="/login">Login</a>

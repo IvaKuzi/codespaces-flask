@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, session
 from flask import flash
 from flask_socketio import SocketIO
 
-
+from utils.chat_lib import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ssdasdmn,a.fgj.arshklgwewet'
@@ -50,7 +50,6 @@ def logout():
     flash(f'{username} ausgelogt')
     return redirect('/')
     
-
 @app.route("/kontakt", methods=['POST', 'GET'])
 def contact():
     if request.method == 'POST':
@@ -77,6 +76,8 @@ def handle_connect():
     ip = request.remote_addr # IP
     username = session['username']
     print(f"Client connected: {sid} (IP: {ip}) (username: {username})")
+    data = getHistory('messages.json')
+    socketio.emit('all-messages', data)
 
 # Track disconnection
 @socketio.on('disconnect')
@@ -85,3 +86,12 @@ def handle_disconnect():
     ip = request.remote_addr # IP
     username = session['username']
     print(f'Client disconnected: {sid}  (IP: {ip}) (username: {username})')
+
+# Track message submission
+@socketio.on('message-submit')
+def handle_message(payload):
+    username = payload['user']
+    content = payload['content']
+    print(f'Message from {username} received: {content}')
+    data = appendMessage(payload)
+    socketio.emit('all-messages', data)

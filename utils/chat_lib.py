@@ -34,3 +34,12 @@ def appendMessage(payload):
         json.dump(data, file, indent=4)  # Write updated data back to the file
 
     return data
+
+
+def appendUser(user):
+  file_name = 'userdata.json'
+  data = getHistory(file_name) # reuse function for messages
+  data.append(user)
+
+  with open(file_name, 'w') as file:
+    json.dump(data, file, indent=4)  # Write updated data back to the file

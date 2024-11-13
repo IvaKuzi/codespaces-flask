@@ -36,13 +36,65 @@ def login():
     username = ''
     if request.method == 'POST':
         username = request.form['username']
+        password = request.form['password']
         print(username)
+        print(password)
+
+
+        username_to_find = username
+        file_name = 'userdata.json'
+        users_data = getHistory(file_name)
+        user_exists = any(entry["username"].lower() == username_to_find.lower() for entry in users_data)
+
+        if not user_exists:
+            flash(f'User {username} nicht vorhanden')
+            return custom_render("login.html")
+        
+
         session['username'] = username
         if username == "":
             flash(f'username incorrect')
         else:
             flash(f'{username} eingelogt')
     return custom_render("login.html")
+
+@app.route("/signup", methods=['POST', 'GET'])
+def signup():
+    username = ''
+    if request.method == 'POST':
+        username = request.form['username']
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+        print(username)
+        print(password1)
+        print(password2)
+
+        username_to_find = username
+        file_name = 'userdata.json'
+        users_data = getHistory(file_name)
+        user_exists = any(entry["username"].lower() == username_to_find.lower() for entry in users_data)
+
+        if user_exists:
+            flash(f'User {username} vorhanden')
+            return custom_render("signup.html")
+        
+        if password1 != password2:
+            flash(f'Kennwörter stimmen nicht überein')
+            return custom_render("signup.html")
+        
+        ###
+        new_user = {
+            'username': username,
+            'password': password1
+        }
+        appendUser(new_user)
+
+        session['username'] = username
+        if username == "":
+            flash(f'username incorrect')
+        else:
+            flash(f'{username} eingelogt')
+    return custom_render("signup.html")
 
 @app.route("/logout")
 def logout():
